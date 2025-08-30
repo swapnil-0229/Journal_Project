@@ -103,7 +103,7 @@ The following are the primary endpoints exposed by the application.
 
 ### 👤 User Management
 
-* **POST** `/user`
+* **POST** `/public/create_user`
 
     **Description**: Creates a new user. The user object should be sent in the request body.
 
@@ -116,7 +116,7 @@ The following are the primary endpoints exposed by the application.
     }
     ```
 
-* **PUT** `/user/{username}`
+* **PUT** `/user`
 
     **Description**: Updates an existing user's details.
 

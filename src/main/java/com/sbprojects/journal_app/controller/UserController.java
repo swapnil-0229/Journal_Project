@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,13 +21,19 @@ public class UserController {
     @Autowired
     private userService myUserService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @PutMapping
     public ResponseEntity<?> updateUser(@RequestBody User newUser) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String oldUser = authentication.getName();
         User userInDb = myUserService.findByUserName(oldUser);
+        
         userInDb.setUsername(newUser.getUsername());
-        userInDb.setPassword(newUser.getPassword());
+        // Encode the new password before saving
+        userInDb.setPassword(passwordEncoder.encode(newUser.getPassword())); 
+        
         myUserService.saveEntry(userInDb);
         return new ResponseEntity<>(HttpStatus.OK);
     }

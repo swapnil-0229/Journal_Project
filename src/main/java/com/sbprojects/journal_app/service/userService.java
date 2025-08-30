@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import com.sbprojects.journal_app.entity.User;
 import com.sbprojects.journal_app.repository.userEntryRepo;
@@ -19,7 +18,8 @@ public class userService {
     @Autowired 
     private userEntryRepo myUserRepo;
 
-    private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public void saveEntry(User myUser) {
         myUser.setPassword(passwordEncoder.encode(myUser.getPassword()));
