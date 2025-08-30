@@ -95,7 +95,7 @@ The following are the primary endpoints exposed by the application.
 
 ### ❤️ Health Check
 
-* **GET** `/health-check`
+* **GET** `/public/health-check`
 
     **Description**: A simple endpoint to confirm that the API is running.
 
@@ -116,9 +116,9 @@ The following are the primary endpoints exposed by the application.
     }
     ```
 
-* **PUT** `/user`
+* **PUT** `/user/update`
 
-    **Description**: Updates an existing user's details.
+    **Description**: Updates the currently authenticated user's details.
 
     **Request Body**:
 
@@ -128,18 +128,22 @@ The following are the primary endpoints exposed by the application.
       "password": "newpassword123"
     }
     ```
+* **DELETE** `/user/delete`
+
+    **Description**: Deletes the currently authenticated user.
+
 
 ### 📓 Journal Entries
 
 **Authentication is required for these endpoints.**
 
-* **GET** `/journal/{username}`
+* **GET** `/journal`
 
-    **Description**: Retrieves all journal entries for a specified user.
+    **Description**: Retrieves all journal entries for the authenticated user.
 
-* **POST** `/journal/{username}`
+* **POST** `/journal`
 
-    **Description**: Creates a new journal entry for a specified user.
+    **Description**: Creates a new journal entry for the authenticated user.
 
     **Request Body**:
 
@@ -152,11 +156,11 @@ The following are the primary endpoints exposed by the application.
 
 * **GET** `/journal/id/{myId}`
 
-    **Description**: Retrieves a single journal entry by its unique ID.
+    **Description**: Retrieves a single journal entry by its unique ID, belonging to the authenticated user.
 
-* **PUT** `/journal/id/{username}/{myId}`
+* **PUT** `/journal/id/{myId}`
 
-    **Description**: Updates an existing journal entry by its ID.
+    **Description**: Updates an existing journal entry by its ID, belonging to the authenticated user.
 
     **Request Body**:
 
@@ -167,9 +171,9 @@ The following are the primary endpoints exposed by the application.
     }
     ```
 
-* **DELETE** `/journal/id/{username}/{myId}`
+* **DELETE** `/journal/id/{myId}`
 
-    **Description**: Deletes a journal entry by its ID and removes its reference from the user.
+    **Description**: Deletes a journal entry by its ID, belonging to the authenticated user.
 
 ---
 
