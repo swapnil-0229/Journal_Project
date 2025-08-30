@@ -1,10 +1,10 @@
 package com.sbprojects.journal_app.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties.Authentication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,19 +20,15 @@ public class UserController {
     @Autowired
     private userService myUserService;
 
-    @PostMapping
-    public void createUser(@RequestBody User myUser) {
-        myUserService.saveNewUser(myUser);
-    }
 
-    @PutMapping("/{oldUser}")
-    public ResponseEntity<?> updateUser(@RequestBody User newUser, @PathVariable String oldUser) {
+    @PutMapping
+    public ResponseEntity<?> updateUser(@RequestBody User newUser) {
+        Authentication authentication = (Authentication) SecurityContextHolder.getContext().getAuthentication();
+        String oldUser = authentication.getUsername();
         User userInDb = myUserService.findByUserName(oldUser);
-        if(userInDb != null) {
-            userInDb.setUsername(newUser.getUsername());
-            userInDb.setPassword(newUser.getPassword());
-            myUserService.saveEntry(userInDb);
-        }
+        userInDb.setUsername(newUser.getUsername());
+        userInDb.setPassword(newUser.getPassword());
+        myUserService.saveEntry(userInDb);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
