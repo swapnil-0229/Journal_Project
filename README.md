@@ -1,0 +1,147 @@
+Journal Application API
+A robust backend application for a personal journaling service, built with Java and the Spring Boot framework. This project provides a secure RESTful API for user authentication and full CRUD (Create, Read, Update, Delete) functionality for journal entries, using MongoDB as the database.
+
+Features
+Secure User Authentication: Employs Spring Security for user registration and login. Passwords are securely hashed using BCrypt.
+
+RESTful API: A well-structured API for managing users and their journal entries.
+
+User-Specific Data: Journal entries are linked to individual user accounts, ensuring data privacy.
+
+MongoDB Integration: Uses Spring Data MongoDB for seamless interaction with a NoSQL database.
+
+Transactional Operations: Ensures data integrity when saving or deleting entries linked to a user.
+
+Health Check Endpoint: A simple endpoint to verify the application's operational status.
+
+Tech Stack
+Framework: Spring Boot
+
+Language: Java 8
+
+Security: Spring Security
+
+Database: Spring Data MongoDB
+
+Build Tool: Apache Maven
+
+Utilities: Lombok
+
+Getting Started
+Follow these instructions to get the project up and running on your local machine for development and testing.
+
+Prerequisites
+Before you begin, ensure you have the following installed:
+
+Java Development Kit (JDK) 8 or newer
+
+Apache Maven
+
+A running instance of MongoDB
+
+Installation & Setup
+Clone the repository:
+
+git clone <YOUR_REPOSITORY_URL>
+cd journal-app
+
+Create the application.properties file:
+For security, the configuration file containing database credentials is not included in the repository. You must create it manually.
+
+Create a new file named application.properties inside the src/main/resources/ directory.
+
+Add the following configuration, replacing the placeholder with your MongoDB connection string and desired database name.
+
+# MongoDB Connection String
+spring.data.mongodb.uri=mongodb://localhost:27017/journaldb
+
+# Server Port (Optional)
+server.port=8080
+
+Build the project using the Maven Wrapper:
+This command will download dependencies and compile the source code.
+
+# For macOS/Linux
+./mvnw clean install
+
+# For Windows
+./mvnw.cmd clean install
+
+Run the application:
+
+java -jar target/journal-app-0.0.1-SNAPSHOT.jar
+
+The application will start, and the API will be accessible at http://localhost:8080.
+
+API Endpoints
+The following are the primary endpoints exposed by the application.
+
+Health Check
+GET /health-check
+
+Description: A simple endpoint to confirm that the API is running.
+
+Response: OK
+
+User Management
+POST /user
+
+Description: Creates a new user. The user object should be sent in the request body.
+
+Request Body:
+
+{
+  "username": "newuser",
+  "password": "password123"
+}
+
+PUT /user/{username}
+
+Description: Updates an existing user's details.
+
+Request Body:
+
+{
+  "username": "updateduser",
+  "password": "newpassword123"
+}
+
+Journal Entries
+Authentication is required for these endpoints.
+
+GET /journal/{username}
+
+Description: Retrieves all journal entries for a specified user.
+
+POST /journal/{username}
+
+Description: Creates a new journal entry for a specified user.
+
+Request Body:
+
+{
+  "title": "My First Entry",
+  "content": "This is the content of my journal entry."
+}
+
+GET /journal/id/{myId}
+
+Description: Retrieves a single journal entry by its unique ID.
+
+PUT /journal/id/{username}/{myId}
+
+Description: Updates an existing journal entry by its ID.
+
+Request Body:
+
+{
+  "title": "Updated Title",
+  "content": "This is the updated content."
+}
+
+DELETE /journal/id/{username}/{myId}
+
+Description: Deletes a journal entry by its ID and removes its reference from the user.
+
+License
+This project is licensed under the MIT License. See the LICENSE file for details.
