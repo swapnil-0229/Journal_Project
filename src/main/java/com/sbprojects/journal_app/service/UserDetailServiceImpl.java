@@ -1,0 +1,30 @@
+package com.sbprojects.journal_app.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Component;
+
+import com.sbprojects.journal_app.entity.User;
+import com.sbprojects.journal_app.repository.userEntryRepo;
+
+@Component
+public class UserDetailServiceImpl implements UserDetailsService{
+
+    @Autowired
+    public userEntryRepo myRepo;
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = myRepo.findByusername(username);
+        if(user != null) {
+            return org.springframework.security.core.userdetails.User.builder()
+                .username(user.getUsername())
+                .password(user.getPassword())
+                .roles(user.getRoles().toArray(new String[0]))
+                .build();
+        }
+        throw new UsernameNotFoundException("User not found with username " + username);
+    }
+}
