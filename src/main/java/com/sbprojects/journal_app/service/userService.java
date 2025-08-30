@@ -21,10 +21,17 @@ public class userService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public void saveEntry(User myUser) {
-        myUser.setPassword(passwordEncoder.encode(myUser.getPassword()));
+    public void saveUser(User myUser) {
+
+        // myUser.setPassword(passwordEncoder.encode(myUser.getPassword()));
+        // myUser.setRoles(Arrays.asList("USER"));
+        // myUserRepo.save(myUser);
+        if (!myUser.getPassword().startsWith("$2a$")) {
+            myUser.setPassword(passwordEncoder.encode(myUser.getPassword()));
+        }
         myUser.setRoles(Arrays.asList("USER"));
         myUserRepo.save(myUser);
+
     }
 
     public List<User> getAll() {

@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
+import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("/public")
@@ -18,8 +18,12 @@ public class PublicController {
     @Autowired
     private userService myUserService;
 
+    @GetMapping("/health-check")
+    public String healthCheck() { return "OK"; }
+    
+
     @PostMapping("/create_user")
     public void createUser(@RequestBody User myUser) {
-        myUserService.saveEntry(myUser);
+        myUserService.saveUser(myUser);
     }
 }
