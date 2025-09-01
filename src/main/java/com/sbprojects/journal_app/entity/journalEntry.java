@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 
 @Data  
 @NoArgsConstructor
-public class journalEntry {
+public class JournalEntry {
 
     @Id
     private ObjectId id;  // we are using an object id  type instead of string or int

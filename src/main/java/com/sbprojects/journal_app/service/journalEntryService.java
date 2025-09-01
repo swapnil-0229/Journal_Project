@@ -9,25 +9,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sbprojects.journal_app.entity.journalEntry;
+import com.sbprojects.journal_app.entity.JournalEntry;
 import com.sbprojects.journal_app.entity.User;
-import com.sbprojects.journal_app.repository.journalEntryRepo;
+import com.sbprojects.journal_app.repository.JournalEntryRepo;
 
 @Component
-public class journalEntryService {
+public class JournalEntryService {
     
     @Autowired
-    private journalEntryRepo myEntryRepo;
+    private JournalEntryRepo myEntryRepo;
 
     @Autowired
-    private userService myUserService;
+    private UserService myUserService;
 
     @Transactional
-    public void saveEntry(journalEntry myEntry, String username) {
+    public void saveEntry(JournalEntry myEntry, String username) {
         try {
             User myUser = myUserService.findByUserName(username);
             myEntry.setDate(LocalDateTime.now());
-            journalEntry saved = myEntryRepo.save(myEntry);
+            JournalEntry saved = myEntryRepo.save(myEntry);
             myUser.getUserEntries().add(saved);
             myUserService.saveUser(myUser);
         } catch (Exception e) {
@@ -36,15 +36,15 @@ public class journalEntryService {
         }
     }
 
-    public void saveEntry(journalEntry myEntry) {
+    public void saveEntry(JournalEntry myEntry) {
         myEntryRepo.save(myEntry);
     }
 
-    public List<journalEntry> getAll() {
+    public List<JournalEntry> getAll() {
         return myEntryRepo.findAll();
     }
 
-    public Optional<journalEntry> findById(ObjectId id){ 
+    public Optional<JournalEntry> findById(ObjectId id){ 
         return myEntryRepo.findById(id);
     }
 

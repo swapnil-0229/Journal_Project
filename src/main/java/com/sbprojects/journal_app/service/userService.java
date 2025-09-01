@@ -8,30 +8,33 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.sbprojects.journal_app.entity.User;
-import com.sbprojects.journal_app.repository.userEntryRepo;
+import com.sbprojects.journal_app.repository.UserEntryRepo;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 
 @Component
-public class userService {
+public class UserService {
 
     @Autowired 
-    private userEntryRepo myUserRepo;
+    private UserEntryRepo myUserRepo;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     public void saveUser(User myUser) {
-
-        // myUser.setPassword(passwordEncoder.encode(myUser.getPassword()));
-        // myUser.setRoles(Arrays.asList("USER"));
-        // myUserRepo.save(myUser);
         if (!myUser.getPassword().startsWith("$2a$")) {
             myUser.setPassword(passwordEncoder.encode(myUser.getPassword()));
         }
         myUser.setRoles(Arrays.asList("USER"));
         myUserRepo.save(myUser);
+    }
 
+    public void saveAdmin(User myUser) {
+        if (!myUser.getPassword().startsWith("$2a$")) {
+            myUser.setPassword(passwordEncoder.encode(myUser.getPassword()));
+        }
+        myUser.setRoles(Arrays.asList("USER", "ADMIN"));
+        myUserRepo.save(myUser);
     }
 
     public List<User> getAll() {

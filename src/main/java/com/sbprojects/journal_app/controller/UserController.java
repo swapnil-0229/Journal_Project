@@ -12,18 +12,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sbprojects.journal_app.entity.User;
-import com.sbprojects.journal_app.repository.userEntryRepo;
-import com.sbprojects.journal_app.service.userService;
+import com.sbprojects.journal_app.repository.UserEntryRepo;
+import com.sbprojects.journal_app.service.UserService;
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
 
     @Autowired
-    private userService myUserService;
+    private UserService myUserService;
 
     @Autowired 
-    private userEntryRepo myUserRepo;
+    private UserEntryRepo myUserRepo;
 
     @PutMapping("/update")
     public ResponseEntity<?> updateUser(@RequestBody User newUser) {

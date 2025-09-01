@@ -7,13 +7,13 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import com.sbprojects.journal_app.entity.User;
-import com.sbprojects.journal_app.repository.userEntryRepo;
+import com.sbprojects.journal_app.repository.UserEntryRepo;
 
 @Component
 public class UserDetailServiceImpl implements UserDetailsService{
 
     @Autowired
-    public userEntryRepo myRepo;
+    public UserEntryRepo myRepo;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
