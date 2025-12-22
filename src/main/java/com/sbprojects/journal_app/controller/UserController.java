@@ -6,14 +6,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sbprojects.journal_app.api.response.WeatherResponse;
 import com.sbprojects.journal_app.entity.User;
 import com.sbprojects.journal_app.repository.UserEntryRepo;
 import com.sbprojects.journal_app.service.UserService;
+import com.sbprojects.journal_app.service.WeatherService;
 
 @RestController
 @RequestMapping("/user")
@@ -24,6 +27,9 @@ public class UserController {
 
     @Autowired 
     private UserEntryRepo myUserRepo;
+
+    @Autowired
+    private WeatherService weatherService;
 
     @PutMapping("/update")
     public ResponseEntity<?> updateUser(@RequestBody User newUser) {
@@ -43,5 +49,17 @@ public class UserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         myUserRepo.deleteByUsername(authentication.getName());
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<?> greetings() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        WeatherResponse weatherResponse = weatherService.getWeather("Manali");
+        String greetings = "";
+        if(weatherResponse != null) {
+            greetings += ", Weather feels like " + weatherResponse.getCurrent().getFeelsLike() +  " , and can be described by " + 
+            weatherResponse.getCurrent().getCondition().getDescription() ;
+        }
+        return new ResponseEntity<>("Hi "+ authentication.getName()+ greetings, HttpStatus.OK);
     }
 }

@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.sbprojects.journal_app.service.UserDetailServiceImpl;
 
 
+@SuppressWarnings("deprecation")
 @Configuration
 @EnableWebSecurity
 public class SpringSecurity extends WebSecurityConfigurerAdapter{

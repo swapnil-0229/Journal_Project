@@ -5,6 +5,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,15 +21,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sbprojects.journal_app.entity.User;
 import com.sbprojects.journal_app.entity.JournalEntry;
+import com.sbprojects.journal_app.entity.User;
 import com.sbprojects.journal_app.service.JournalEntryService;
 import com.sbprojects.journal_app.service.UserService;
 
+import lombok.extern.slf4j.Slf4j;
+
 
 @RestController
+@Slf4j
 @RequestMapping("/journal")
 public class JournalEntryController {
+
+    private static final Logger logger = LoggerFactory.getLogger(JournalEntryController.class);
 
     @Autowired
     private JournalEntryService myEntryService;
@@ -104,14 +111,13 @@ public class JournalEntryController {
                 if(newEntry.getTitle() != null) {
                     oldEntry.setTitle(newEntry.getTitle());
                 }
-                if(newEntry.getContent() != null) {
-                    oldEntry.setContent(newEntry.getContent());
-                }
                 myEntryService.saveEntry(oldEntry);
-                System.out.println("Entry Updated");
+                logger.info("Entry Updated");
                 return new ResponseEntity<>(oldEntry, HttpStatus.OK);
             }
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }
+

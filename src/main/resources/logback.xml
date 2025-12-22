@@ -1,0 +1,41 @@
+<configuration>
+
+    <appender name = "myConsoleAppender" class = "ch.qos.logback.core.ConsoleAppender">
+        <!-- <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>WARN</level> -->
+        <!-- </filter> -->
+        <encoder>
+            <pattern>
+                %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <appender name = "myFileAppender" class = "ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>
+            journal_app.log
+        </file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>journal_app-%d{yy-MM-dd_HH-mm}.%i.log</fileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>
+                %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <logger name="org.springframework" level="WARN"/>
+    <logger name="org.mongodb.driver" level="WARN"/>
+    <logger name="org.hibernate" level="WARN"/>
+    <logger name="com.sbprojects.journal_app" level="INFO"/>
+
+    <root level = "INFO">
+        <appender-ref ref = "myConsoleAppender" />
+        <appender-ref ref = "myFileAppender" />
+    </root>
+
+</configuration>
