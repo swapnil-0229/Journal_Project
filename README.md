@@ -1,42 +1,50 @@
 # 📓 Journal Application API
 
-A robust backend application for a personal journaling service, built with **Java** and the **Spring Boot** framework. ☕ This project provides a secure RESTful API for user authentication and full **CRUD** (Create, Read, Update, Delete) functionality for journal entries, using **MongoDB** as the database. 🔐
+A robust backend application for a personal journaling service, built with **Java** and the **Spring Boot** framework. ☕ This project provides a secure RESTful API for user authentication and full **CRUD** (Create, Read, Update, Delete) functionality for journal entries.
+
+It goes beyond basic journaling by integrating **External APIs for Weather**, **Sentiment Analysis** on journal entries, and automated **Email Notifications**. 🌤️📧
 
 ---
 
 ## ✨ Features
 
 * **Secure User Authentication**: Employs **Spring Security** for user registration and login. Passwords are securely hashed using **BCrypt**. 🛡️
-* **RESTful API**: A well-structured API for managing users and their journal entries. 🌐
-* **User-Specific Data**: Journal entries are linked to individual user accounts, ensuring data privacy. 👤
+* **Smart Journaling**:
+    * **Weather Integration**: Fetches and displays real-time weather data based on the user's location (default "Manali" in code) when they log in. 🌦️
+    * **Sentiment Analysis**: Analyzes journal entries to determine the user's weekly mood (Happy, Sad, Angry, Anxious). 🧠
+* **Automated Scheduler**:
+    * **Weekly Emails**: Automatically sends an email to users every Sunday with a summary of their sentiment analysis for the last 7 days. 📅
+    * **Cache Management**: Periodically clears the application cache to ensure fresh configuration data. 🔄
+* **Admin Dashboard**: Dedicated endpoints for admins to manage users and system configurations. 👮
+* **RESTful API**: A well-structured API for managing users, journal entries, and admin tasks. 🌐
 * **MongoDB Integration**: Uses **Spring Data MongoDB** for seamless interaction with a NoSQL database. 🍃
-* **Transactional Operations**: Ensures data integrity when saving or deleting entries linked to a user. 🔄
 * **Health Check Endpoint**: A simple endpoint to verify the application's operational status. ❤️
 
 ---
 
 ## 🛠️ Tech Stack
 
-* **Framework**: Spring Boot
+* **Framework**: Spring Boot 2.7.x
 * **Language**: Java 8
 * **Security**: Spring Security
-* **Database**: Spring Data MongoDB
+* **Database**: MongoDB
 * **Build Tool**: Apache Maven
-* **Utilities**: Lombok
+* **Mail**: Java Mail Sender
+* **Utilities**: Lombok, Spring Boot Actuator
 
 ---
 
 ## 🚀 Getting Started
 
-Follow these instructions to get the project up and running on your local machine for development and testing.
+Follow these instructions to get the project up and running on your local machine.
 
 ### ✅ Prerequisites
-
-Before you begin, ensure you have the following installed:
 
 * Java Development Kit (JDK) 8 or newer
 * Apache Maven
 * A running instance of MongoDB
+* An SMTP account (e.g., Gmail) for sending emails
+* A Weather API Key (e.g., from WeatherAPI.com)
 
 ### ⚙️ Installation & Setup
 
@@ -47,133 +55,125 @@ Before you begin, ensure you have the following installed:
     cd journal-app
     ```
 
-2.  **Create the `application.properties` file:**
+2.  **Configure `application.properties`:**
 
-    For security, the configuration file containing database credentials is not included in the repository. You must create it manually.
-
-    Create a new file named `application.properties` inside the `src/main/resources/` directory.
-
-    Add the following configuration, replacing the placeholder with your MongoDB connection string and desired database name.
+    Create a file named `application.properties` in `src/main/resources/`. Add the following configurations:
 
     ```properties
-    # MongoDB Connection String
+    # MongoDB Connection
     spring.data.mongodb.uri=mongodb://localhost:27017/journaldb
 
-    # Server Port (Optional)
+    # Server Port
     server.port=8080
+
+    # Email Configuration (Required for Sentiment Analysis Emails)
+    spring.mail.host=smtp.gmail.com
+    spring.mail.port=587
+    spring.mail.username=YOUR_EMAIL@gmail.com
+    spring.mail.password=YOUR_APP_PASSWORD
+    spring.mail.properties.mail.smtp.auth=true
+    spring.mail.properties.mail.smtp.starttls.enable=true
+
+    # Weather API Key
+    weather.api.key=YOUR_WEATHER_API_KEY
     ```
 
-3.  **Build the project using the Maven Wrapper:**
+3.  **Database Configuration (App Cache):**
 
-    This command will download dependencies and compile the source code.
+    The application stores the external API URL in the database to allow dynamic updates without code changes. You must insert the following document into the `config_journal_app` collection in your MongoDB:
 
-    * For **macOS/Linux**:
-
-        ```bash
-        ./mvnw clean install
-        ```
-
-    * For **Windows**:
-
-        ```bash
-        ./mvnw.cmd clean install
-        ```
-
-4.  **Run the application:**
-
-    ```bash
-    java -jar target/journal-app-0.0.1-SNAPSHOT.jar
+    ```json
+    {
+      "key": "WEATHER_API",
+      "value": "[http://api.weatherapi.com/v1/current.json?key=](http://api.weatherapi.com/v1/current.json?key=)<apiKey>&q=<city>"
+    }
     ```
+    *(Note: `<apiKey>` and `<city>` are placeholders used by the application code.)*
 
-    The application will start, and the API will be accessible at `http://localhost:8080`.
+4.  **Build and Run:**
+
+    * **Using Maven Wrapper:**
+        ```bash
+        ./mvnw clean install  # macOS/Linux
+        ./mvnw.cmd clean install # Windows
+        ```
+
+    * **Run the JAR:**
+        ```bash
+        java -jar target/journal-app-0.0.1-SNAPSHOT.jar
+        ```
 
 ---
 
 ## 📝 API Endpoints
 
-The following are the primary endpoints exposed by the application.
-
-### ❤️ Health Check
+### ❤️ Public Endpoints
 
 * **GET** `/public/health-check`
+    * **Description**: Checks if the server is running.
+    * **Response**: `OK`
 
-    **Description**: A simple endpoint to confirm that the API is running.
+* **POST** `/public/create-user`
+    * **Description**: Register a new user.
+    * **Body**:
+        ```json
+        {
+            "username": "newuser",
+            "password": "password123",
+            "email": "user@example.com",
+            "sentimentAnalysis": true
+        }
+        ```
 
-    **Response**: `OK`
+### 👤 User Management (Authenticated)
 
-### 👤 User Management
-
-* **POST** `/public/create_user`
-
-    **Description**: Creates a new user. The user object should be sent in the request body.
-
-    **Request Body**:
-
-    ```json
-    {
-      "username": "newuser",
-      "password": "password123"
-    }
-    ```
+* **GET** `/user`
+    * **Description**: Returns a greeting message including the current weather "feels like" temperature and condition.
+    * **Response**: `"Hi [username], Weather feels like 25.0 , and can be described by Sunny"`
 
 * **PUT** `/user/update`
+    * **Description**: Updates the authenticated user's credentials.
+    * **Body**: `{"username": "...", "password": "..."}`
 
-    **Description**: Updates the currently authenticated user's details.
-
-    **Request Body**:
-
-    ```json
-    {
-      "username": "updateduser",
-      "password": "newpassword123"
-    }
-    ```
 * **DELETE** `/user/delete`
+    * **Description**: Deletes the authenticated user account.
 
-    **Description**: Deletes the currently authenticated user.
-
-
-### 📓 Journal Entries
-
-**Authentication is required for these endpoints.**
+### 📓 Journal Entries (Authenticated)
 
 * **GET** `/journal`
-
-    **Description**: Retrieves all journal entries for the authenticated user.
+    * **Description**: Get all journal entries for the user.
 
 * **POST** `/journal`
-
-    **Description**: Creates a new journal entry for the authenticated user.
-
-    **Request Body**:
-
-    ```json
-    {
-      "title": "My First Entry",
-      "content": "This is the content of my journal entry."
-    }
-    ```
+    * **Description**: Create a new journal entry.
+    * **Body**:
+        ```json
+        {
+            "title": "My Day",
+            "content": "Today was a good day...",
+            "sentiment": "HAPPY"
+        }
+        ```
 
 * **GET** `/journal/id/{myId}`
-
-    **Description**: Retrieves a single journal entry by its unique ID, belonging to the authenticated user.
+    * **Description**: Get a specific entry by ID.
 
 * **PUT** `/journal/id/{myId}`
-
-    **Description**: Updates an existing journal entry by its ID, belonging to the authenticated user.
-
-    **Request Body**:
-
-    ```json
-    {
-      "title": "Updated Title",
-      "content": "This is the updated content."
-    }
-    ```
+    * **Description**: Update a specific entry.
 
 * **DELETE** `/journal/id/{myId}`
+    * **Description**: Delete a specific entry.
 
-    **Description**: Deletes a journal entry by its ID, belonging to the authenticated user.
+### 👮 Admin Dashboard (Requires ROLE_ADMIN)
+
+* **GET** `/admin/all-users`
+    * **Description**: Retrieve a list of all users in the system.
+
+* **POST** `/admin/add-admin`
+    * **Description**: Create a new user with Admin privileges.
+    * **Body**: Same as create-user.
+
+* **GET** `/admin/clear-app-cache`
+    * **Description**: Force reload of configuration data (like API URLs) from the database into the application cache.
 
 ---
 
