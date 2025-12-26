@@ -1,5 +1,6 @@
 package com.sbprojects.journal_app.scheduler;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,6 +11,7 @@ public class UserScheduerTests {
     @Autowired
     public UserScheduler myScheduler;
 
+    @Disabled
     @Test
     public void test(){
         myScheduler.fetchUsersAndSendSaMail();

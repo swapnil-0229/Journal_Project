@@ -30,8 +30,9 @@ public class UserScheduler {
     public AppCache appCache;
 
     // @Scheduled(cron = "0 0 9 * * SUN")
-    public void fetchUsersAndSendSaMail() {
+    public void fetchUsersAndSendSaMail() { 
         List<User> all = userRepo.getUserForSA();
+        System.out.println("DEBUG: The list size is: " + all.size());
 
         for(User user: all) {
             List<JournalEntry> journalEntries = user.getUserEntries();
@@ -51,7 +52,7 @@ public class UserScheduler {
 
             for(Map.Entry<Sentiment, Integer> entry: sentimentCounts.entrySet()) {
                 if(entry.getValue() > maxCount) {
-                    maxCount = entry.getValue();
+                    maxCount = entry.getValue(); 
                     mostFrequentSentiment = entry.getKey();
                 }
             }
@@ -62,8 +63,8 @@ public class UserScheduler {
         }
     }
 
-    @Scheduled(cron = "0 */5 * * * *")
-    public void clearAppCache(){ 
+    @Scheduled(cron = "0 */10 * * * *")
+    public void clearAppCache(){   
         appCache.init();
     }
 }

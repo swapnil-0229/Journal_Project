@@ -18,5 +18,4 @@ public class EmailServiceTests {
         "testing java mail sender", 
         "hi there!!, aap kaise ho");
     }
-
 }

@@ -39,4 +39,7 @@ public class UserRepoImpl {
         List<User> all = mongoTemplate.find(query, User.class);
         return all;
     }
+
+    
+
 }
