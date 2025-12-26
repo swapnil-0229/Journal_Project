@@ -2,7 +2,9 @@
 
 A robust backend application for a personal journaling service, built with **Java** and the **Spring Boot** framework. ☕ This project provides a secure RESTful API for user authentication and full **CRUD** (Create, Read, Update, Delete) functionality for journal entries.
 
-It goes beyond basic journaling by integrating **External APIs for Weather**, **Sentiment Analysis** on journal entries, and automated **Email Notifications**. 🌤️📧
+It goes beyond basic journaling by integrating **External APIs for Weather**, **Sentiment Analysis** on journal entries, and automated **Email Notifications**. 🌤️📧 
+
+**New:** Now optimized with **Redis** caching for better performance! 🚀
 
 ---
 
@@ -10,7 +12,8 @@ It goes beyond basic journaling by integrating **External APIs for Weather**, **
 
 * **Secure User Authentication**: Employs **Spring Security** for user registration and login. Passwords are securely hashed using **BCrypt**. 🛡️
 * **Smart Journaling**:
-    * **Weather Integration**: Fetches and displays real-time weather data based on the user's location (default "Manali" in code) when they log in. 🌦️
+    * **Weather Integration**: Fetches and displays real-time weather data based on the user's location (default "Manali"). 
+    * **Redis Caching**: Weather API responses are cached in **Redis** for 5 minutes to reduce external API calls and improve response times. ⚡
     * **Sentiment Analysis**: Analyzes journal entries to determine the user's weekly mood (Happy, Sad, Angry, Anxious). 🧠
 * **Automated Scheduler**:
     * **Weekly Emails**: Automatically sends an email to users every Sunday with a summary of their sentiment analysis for the last 7 days. 📅
@@ -28,6 +31,7 @@ It goes beyond basic journaling by integrating **External APIs for Weather**, **
 * **Language**: Java 8
 * **Security**: Spring Security
 * **Database**: MongoDB
+* **Caching**: Redis
 * **Build Tool**: Apache Maven
 * **Mail**: Java Mail Sender
 * **Utilities**: Lombok, Spring Boot Actuator
@@ -43,6 +47,7 @@ Follow these instructions to get the project up and running on your local machin
 * Java Development Kit (JDK) 8 or newer
 * Apache Maven
 * A running instance of MongoDB
+* A running instance of **Redis** (Local or Cloud)
 * An SMTP account (e.g., Gmail) for sending emails
 * A Weather API Key (e.g., from WeatherAPI.com)
 
@@ -62,6 +67,12 @@ Follow these instructions to get the project up and running on your local machin
     ```properties
     # MongoDB Connection
     spring.data.mongodb.uri=mongodb://localhost:27017/journaldb
+
+    # Redis Configuration
+    spring.redis.host=localhost
+    spring.redis.port=6379
+    # If using Redis Cloud, uncomment and add password:
+    # spring.redis.password=YOUR_REDIS_PASSWORD
 
     # Server Port
     server.port=8080
