@@ -13,14 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.sbprojects.journal_app.entity.User;
-import com.sbprojects.journal_app.repository.UserEntryRepo;
+import com.sbprojects.journal_app.repository.UserRepository;
 
 
 @SpringBootTest
 public class UserServicetests {
 
     @Autowired
-    public UserEntryRepo myUserRepo;
+    public UserRepository myUserRepo;
 
     @Autowired
     public UserService myUserService;
@@ -55,14 +55,14 @@ public class UserServicetests {
         "lol"
     })
     public void testFindByUserName(String name) {
-        assertNotNull(myUserRepo.findByusername(name), "failed for " + name);
+        assertNotNull(myUserRepo.findByUsername(name), "failed for " + name);
     }
 
     @Disabled
     @ParameterizedTest
     @ArgumentsSource(UserArgumentsProvider.class)
     public void testSaveNewUser(User user) {
-        assertTrue(myUserService.saveUser(user));
+        myUserService.saveUser(user);
     }
 
     @Disabled

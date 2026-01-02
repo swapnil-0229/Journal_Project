@@ -7,6 +7,3 @@ import com.sbprojects.journal_app.entity.JournalEntry;
 
 public interface JournalEntryRepo extends MongoRepository<JournalEntry, ObjectId>{
 }
-
-
-// controller calls ->>> service calls ->>> repository

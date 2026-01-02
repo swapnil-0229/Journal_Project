@@ -15,8 +15,11 @@ import com.sbprojects.journal_app.cache.AppCache;
 import com.sbprojects.journal_app.entity.User;
 import com.sbprojects.journal_app.service.UserService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/admin")
+@Tag(name = "Admin Api's")
 public class AdminController {
 
     @Autowired
@@ -32,6 +35,7 @@ public class AdminController {
         if (all != null && !all.isEmpty()) {
             return new ResponseEntity<>(all, HttpStatus.OK);
         }
+        
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 

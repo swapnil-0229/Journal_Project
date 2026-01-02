@@ -6,7 +6,10 @@ import org.springframework.stereotype.Service;
 
 import com.sbprojects.journal_app.model.SentimentData;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class SentimentConsumerService {
     
     @Autowired
@@ -14,10 +17,15 @@ public class SentimentConsumerService {
 
     @KafkaListener(topics = "weekly-sentiments", groupId = "weekly-sentiment-group")
     public void consume(SentimentData sentimentData){
-        sendEmail(sentimentData);
+        try {
+            log.info("Consumed sentiment update for user: {}", sentimentData.getEmail());
+            sendEmail(sentimentData);
+        } catch (Exception e) {
+            log.error("Failed to send email to user: {}", sentimentData.getEmail(), e);
+        }
     }
 
     private void sendEmail(SentimentData sentimentData){
-        emailService.sendEmail(sentimentData.getEmail(), "sentiment for previous week", sentimentData.getSentiment());
+        emailService.sendEmail(sentimentData.getEmail(), "sentiment for previous week: ", sentimentData.getSentiment());
     }
 }

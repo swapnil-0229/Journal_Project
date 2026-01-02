@@ -14,19 +14,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sbprojects.journal_app.api.response.WeatherResponse;
 import com.sbprojects.journal_app.entity.User;
-import com.sbprojects.journal_app.repository.UserEntryRepo;
+import com.sbprojects.journal_app.repository.UserRepository;
 import com.sbprojects.journal_app.service.UserService;
 import com.sbprojects.journal_app.service.WeatherService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/user")
+@Tag(name = "User Api's", description = "read, update and delete user")
 public class UserController {
 
     @Autowired
     private UserService myUserService;
 
     @Autowired 
-    private UserEntryRepo myUserRepo;
+    private UserRepository myUserRepo;
 
     @Autowired
     private WeatherService weatherService;

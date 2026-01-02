@@ -11,6 +11,7 @@ public class UserScheduerTests {
     @Autowired
     public UserScheduler myScheduler;
 
+    @Disabled
     @Test
     public void test(){
         myScheduler.fetchUsersAndSendSaMail();

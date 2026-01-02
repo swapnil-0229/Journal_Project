@@ -10,8 +10,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.sbprojects.journal_app.entity.User;
-import com.sbprojects.journal_app.repository.UserEntryRepo;
+import com.sbprojects.journal_app.repository.UserRepository;
 
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -20,54 +21,42 @@ import lombok.extern.slf4j.Slf4j;
 public class UserService {
 
     @Autowired 
-    private UserEntryRepo myUserRepo;
-
-    // we are using Slf4j notation so we don't need this defination of logger
-    // Logger logger = LoggerFactory.getLogger(UserService.class);
+    private UserRepository userEntryRepo;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public boolean saveUser(User myUser) {
-        try {
-            if (!myUser.getPassword().startsWith("$2a$")) {
-            myUser.setPassword(passwordEncoder.encode(myUser.getPassword()));
-            }
-            myUser.setRoles(Arrays.asList("USER"));
-            myUserRepo.save(myUser);
-            return true;
-        } catch (Exception e) {
-            log.info("hahahahhaha  {}", myUser.getUsername(),  e);
-            // logger.warn("hahahahhaha");   // we use log with slf4j notation
-            // logger.error("hahahahhaha");
-            // logger.debug("hahahahhaha");
-            // logger.trace("hahahahhaha");
-            System.out.println("Some error occured while saving user" + e);
-            return false;
-        }
-    }
-
-    public void saveAdmin(User myUser) {
+    public void saveUser(@NonNull User myUser) {
         if (!myUser.getPassword().startsWith("$2a$")) {
             myUser.setPassword(passwordEncoder.encode(myUser.getPassword()));
         }
+
+        myUser.setRoles(Arrays.asList("USER"));
+        userEntryRepo.save(myUser);
+    }
+
+    public void saveAdmin(@NonNull User myUser) {
+        if (!myUser.getPassword().startsWith("$2a$")) {
+            myUser.setPassword(passwordEncoder.encode(myUser.getPassword()));
+        }
+
         myUser.setRoles(Arrays.asList("USER", "ADMIN"));
-        myUserRepo.save(myUser);
+        userEntryRepo.save(myUser);
     }
 
     public List<User> getAll() {
-        return myUserRepo.findAll();
+        return userEntryRepo.findAll();
     }
 
-    public Optional<User> findById(ObjectId id){ 
-        return myUserRepo.findById(id);
+    public Optional<User> findById(@NonNull ObjectId id){ 
+        return userEntryRepo.findById(id);
     }
 
-    public void deleteById(ObjectId myId) {
-        myUserRepo.deleteById(myId);
+    public void deleteById(@NonNull ObjectId myId) {
+        userEntryRepo.deleteById(myId);
     }
 
-    public User findByUserName(String username) {
-        return myUserRepo.findByusername(username);
+    public User findByUserName(@NonNull String username) {
+        return userEntryRepo.findByUsername(username);
     }
 }

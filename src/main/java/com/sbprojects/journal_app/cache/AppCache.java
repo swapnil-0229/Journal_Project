@@ -4,32 +4,34 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.sbprojects.journal_app.entity.ConfigJournalAppEntity;
+import com.sbprojects.journal_app.enums.AppCacheKey;
 import com.sbprojects.journal_app.repository.ConfigJournalAppRepo;
+
+import jakarta.annotation.PostConstruct;
 
 @Component
 public class AppCache {
 
-    public enum keys {
-        WEATHER_API;
-    }
-    
-    public Map<String, String> appCache;
+    private Map<String, String> configCache;
 
     @Autowired
-    public ConfigJournalAppRepo configJournalAppRepo;
+    private ConfigJournalAppRepo configJournalAppRepo;
 
     @PostConstruct
     public void init() {
-        appCache = new HashMap<>();
+        configCache = new HashMap<>();
         List<ConfigJournalAppEntity> list = configJournalAppRepo.findAll();
         for(ConfigJournalAppEntity configJournalAppEntity : list){
-            appCache.put(configJournalAppEntity.getKey(), configJournalAppEntity.getValue());
+            configCache.put(configJournalAppEntity.getKey(), configJournalAppEntity.getValue());
         }
+    }
+
+    public String get(AppCacheKey key){
+        return configCache.get(key.toString());
     }
 }
