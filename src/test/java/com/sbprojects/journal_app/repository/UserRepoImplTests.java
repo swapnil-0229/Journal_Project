@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class UserRepoImplTests {
 
     @Autowired
-    public UserRepoImpl userRepoImpl;
+    public UserSARepository userRepoImpl;
 
     @Disabled
     @Test

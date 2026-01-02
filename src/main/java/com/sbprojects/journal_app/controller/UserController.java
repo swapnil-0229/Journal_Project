@@ -13,48 +13,68 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sbprojects.journal_app.api.response.WeatherResponse;
+import com.sbprojects.journal_app.dto.UserDTO;
 import com.sbprojects.journal_app.entity.User;
 import com.sbprojects.journal_app.repository.UserRepository;
 import com.sbprojects.journal_app.service.UserService;
 import com.sbprojects.journal_app.service.WeatherService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/user")
-@Tag(name = "User Api's", description = "read, update and delete user")
+@Tag(name = "User Api's", description = "Operations for managing the user's own profile (Update, Delete, Greetings).")
 public class UserController {
 
     @Autowired
-    private UserService myUserService;
+    private UserService userService;
 
     @Autowired 
-    private UserRepository myUserRepo;
+    private UserRepository userRepo;
 
     @Autowired
     private WeatherService weatherService;
 
     @PutMapping("/update")
-    public ResponseEntity<?> updateUser(@RequestBody User newUser) {
+    @Operation(summary = "Update User Profile", description = "Updates username and password for the currently authenticated user.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User updated successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid input or user not found")
+    })
+    public ResponseEntity<?> updateUser(@RequestBody @Valid UserDTO userDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String oldUser = authentication.getName();
-        User userInDb = myUserService.findByUserName(oldUser);
+        User userInDb = userService.findByUserName(oldUser);
 
-        userInDb.setUsername(newUser.getUsername());
-        userInDb.setPassword(newUser.getPassword()); 
-        myUserService.saveUser(userInDb);
-
-        return new ResponseEntity<>(HttpStatus.OK);
+        if (userInDb != null) {
+            userInDb.setUsername(userDTO.getUsername());
+            userInDb.setPassword(userDTO.getPassword());
+            userService.saveUser(userInDb);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping("/delete")
+    @Operation(summary = "Delete User Account", description = "Permanently deletes the currently authenticated user.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "User deleted successfully")
+    })
     public ResponseEntity<?> deleteUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        myUserRepo.deleteByUsername(authentication.getName());
+        userRepo.deleteByUsername(authentication.getName());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping
+    @Operation(summary = "Get Weather Greeting", description = "Returns a personalized greeting with current weather info.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Greeting fetched successfully")
+    })
     public ResponseEntity<?> greetings() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         WeatherResponse weatherResponse = weatherService.getWeather("Manali");

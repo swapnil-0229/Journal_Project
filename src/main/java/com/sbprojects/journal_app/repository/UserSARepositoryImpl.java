@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.sbprojects.journal_app.entity.User;
 
 @Repository
-public class UserRepoImpl implements UserSARepository{
+public class UserSARepositoryImpl implements UserSARepository{
 
     @Autowired
     public MongoTemplate mongoTemplate;
