@@ -1,146 +1,237 @@
-# 📓 Journal Application API  
-### Enterprise-Grade Backend System (Java 21 • Spring Boot • Kafka • Redis)
+# 📓 Journal Application API
 
-A **production-ready, scalable backend** for a smart personal journaling platform, designed to demonstrate **modern backend engineering practices** including **secure authentication**, **event-driven architecture**, **asynchronous processing**, and **runtime configuration management**.
+A production-grade backend for a smart personal journaling platform, built using Java 21 and Spring Boot 3 ☕.
 
-This project reflects **real-world system design**, not a CRUD demo.
-
----
-
-## 🚀 Why This Project Stands Out
-
-✔ Built with **Java 21 & Spring Boot 3**  
-✔ Implements **JWT & OAuth2 authentication (Google)**  
-✔ Uses **Apache Kafka** for async, event-driven workflows  
-✔ Integrates **Redis caching** to optimize external API calls  
-✔ Supports **dynamic runtime configuration** without redeployments  
-✔ Designed with **clean architecture & separation of concerns**
+The application provides a secure, scalable RESTful API with JWT & OAuth2 authentication, full CRUD journaling, and event-driven async processing. It integrates Weather APIs, AI-based Sentiment Analysis, Apache Kafka, Redis caching, and dynamic runtime configuration, making it a strong real-world backend system. 🚀
 
 ---
 
-## 🧠 System Design & Architecture
+## ✨ Key Features
 
 ### 🔐 Authentication & Security
-- Stateless **JWT-based authentication**
-- **OAuth2 (Google Login)** with auto user provisioning
-- Secure password storage using **BCrypt**
-- **Role-based access control** (USER / ADMIN)
-- Implemented using **Spring Security 6**
+- Stateless authentication using JWT (JSON Web Tokens)
+- OAuth2 login support (Google)
+  - Auto user registration on first OAuth login
+  - JWT issued after successful OAuth authentication
+- Password hashing with BCrypt
+- Role-based access control (USER, ADMIN)
+- Built with Spring Security 6
 
 ---
 
-### ⚡ Event-Driven & Asynchronous Processing
-- **Apache Kafka** used for:
-  - Background sentiment analysis
-  - Weekly sentiment summary generation
-- Decoupled producers and consumers for scalability
-- Prevents blocking user-facing API requests
+### 📖 API Documentation
+- Integrated Swagger UI (OpenAPI 3)
+- Categorized endpoints: Public / Auth, User, Journal, Admin
 
 ---
 
-### 🤖 Smart Features (Real-World Integrations)
+### 🤖 Smart Journaling
 
-#### 🌦 Weather-Aware Journaling
-- Captures **real-time weather data** on journal creation
-- External Weather API calls optimized using **Redis cache**
-- Cache TTL: **5 minutes**
+#### 🌦 Weather Integration
+- Real-time weather captured while creating journal entries
+- Weather API URL fetched dynamically from MongoDB
 
-#### 😊 AI-Based Sentiment Analysis
-- Emotion classification:
-  - Happy
-  - Sad
-  - Angry
-  - Anxious
-- Executed asynchronously via Kafka consumers
-- Weekly aggregated sentiment reports
+#### 🧠 Sentiment Analysis
+- Emotion detection (Happy, Sad, Angry, Anxious)
+- Processed asynchronously via Kafka consumers
+
+#### 🚀 Redis Caching
+- Weather API responses cached for 5 minutes
+- Reduced external API calls and improved performance
 
 ---
 
-### 🔁 Dynamic Runtime Configuration
-- Application config stored in **MongoDB**
-- In-memory refresh without application restart
-- Admin-controlled cache & config reload
-- Demonstrates **zero-downtime configuration management**
+### ⚡ Async Processing & Scheduling
+- Event-driven architecture using Apache Kafka
+- Weekly sentiment summary scheduler
+  - Runs every Sunday at 9:00 AM
+  - Publishes summaries to Kafka
+  - Sends email notifications
+- Dynamic application configuration
+  - Config stored in MongoDB
+  - Refreshed in-memory without restart
+  - Admin-controlled cache refresh
 
 ---
 
-### 👮 Admin & Observability Features
-- View and manage all registered users
-- Promote users to ADMIN role
+### 👮 Admin Capabilities
+- View all registered users
+- Promote users to ADMIN
 - Clear application cache dynamically
 - Monitor journal activity
 
 ---
 
-## 🛠️ Tech Stack (Industry-Relevant)
+## 🛠️ Tech Stack
 
-| Category | Technology |
-|--------|-----------|
-| Language | Java 21 |
-| Framework | Spring Boot 3.4.1 |
-| Security | Spring Security, JWT, OAuth2 |
-| Database | MongoDB |
-| Cache | Redis |
-| Messaging | Apache Kafka |
-| API Docs | Swagger / OpenAPI 3 |
-| Build Tool | Maven |
-| Email | SMTP (Spring Mail) |
-| Auth Provider | Google OAuth2 |
+| Layer        | Technology |
+|-------------|------------|
+| Language     | Java 21 |
+| Framework    | Spring Boot 3.4.1 |
+| Security     | Spring Security, JWT, OAuth2 |
+| Database     | MongoDB |
+| Cache        | Redis |
+| Messaging    | Apache Kafka |
+| API Docs     | SpringDoc OpenAPI |
+| Build Tool   | Maven |
+| Email        | Spring Mail (SMTP) |
+
+---
+
+## 🚀 Getting Started
+
+### ✅ Prerequisites
+- JDK 21
+- Docker & Docker Compose
+- MongoDB
+- Redis
+- Kafka & Zookeeper
+- Maven
+- SMTP email account
+- Weather API key
+- Google OAuth2 credentials
+
+---
+
+## ⚙️ Installation & Setup
+
+### 1️⃣ Clone Repository
+git clone https://github.com/swapnil-0229/Journal_Project.git  
+cd Journal_Project
+
+---
+
+### 2️⃣ Start Infrastructure
+Ensure MongoDB, Redis, Kafka, and Zookeeper are running:
+
+docker-compose up -d
+
+---
+
+### 3️⃣ Application Configuration
+Update `src/main/resources/application.properties`:
+
+# MongoDB
+spring.data.mongodb.uri=mongodb://localhost:27017/journaldb
+
+# Redis
+spring.redis.host=localhost  
+spring.redis.port=6379
+
+# Kafka
+spring.kafka.bootstrap-servers=localhost:9092  
+spring.kafka.consumer.group-id=weekly-sentiment-group
+
+# JWT
+jwt.secret=YOUR_SECRET_KEY  
+jwt.expiration=86400000
+
+# Email
+spring.mail.host=smtp.gmail.com  
+spring.mail.port=587  
+spring.mail.username=YOUR_EMAIL@gmail.com  
+spring.mail.password=YOUR_APP_PASSWORD  
+spring.mail.properties.mail.smtp.auth=true  
+spring.mail.properties.mail.smtp.starttls.enable=true
+
+# Weather API
+weather.api.key=YOUR_WEATHER_API_KEY
+
+# OAuth2 Google
+spring.security.oauth2.client.registration.google.client-id=YOUR_CLIENT_ID  
+spring.security.oauth2.client.registration.google.client-secret=YOUR_CLIENT_SECRET  
+spring.security.oauth2.client.registration.google.scope=openid,profile,email
+
+---
+
+### 4️⃣ MongoDB Dynamic Config (Mandatory)
+Insert the following document into the `config_journal_app` collection:
+
+{
+  "key": "WEATHER_API",
+  "value": "http://api.weatherapi.com/v1/current.json?key=<apiKey>&q=<city>"
+}
+
+---
+
+### 5️⃣ Build & Run
+./mvnw clean install  
+java -jar target/journal-app-0.0.1-SNAPSHOT.jar
 
 ---
 
 ## 📄 API Documentation
-- **Swagger UI:**  
-  `http://localhost:8080/swagger-ui/index.html`
-- **OpenAPI Spec:**  
-  `http://localhost:8080/v3/api-docs`
+
+Swagger UI:  
+http://localhost:8080/swagger-ui/index.html
+
+OpenAPI Spec:  
+http://localhost:8080/v3/api-docs
 
 ---
 
-## 🧩 Key API Endpoints (Overview)
+## 🔐 Authentication Guide
 
-### Public / Auth
-- `POST /public/signup`
-- `POST /public/login`
-- `GET /auth/google/callback`
-
-### Journal
-- `POST /journal`
-- `GET /journal`
-- `PUT /journal/{id}`
-- `DELETE /journal/{id}`
-
-### Admin
-- `GET /admin/all-users`
-- `PUT /admin/promote/{userId}`
-- `GET /admin/clear-app-cache`
+### JWT Login
+- Call POST /public/login
+- Copy JWT token from response
+- In Swagger UI → Authorize
+- Enter:  
+  Bearer <JWT_TOKEN>
 
 ---
 
-## 🧪 Engineering Practices Demonstrated
-
-- Stateless API design
-- Clean layered architecture
-- Cache-aside strategy with Redis
-- Async messaging with Kafka
-- Secure authentication workflows
-- External API integration
-- Runtime configuration management
-- Production-grade error handling
+### OAuth2 Login (Google)
+- Authenticate with Google
+- Callback endpoint: /auth/google/callback
+- Auth code exchanged for JWT
+- Use JWT for all protected APIs
 
 ---
 
-## 🏁 Quick Setup (For Reviewers)
+## 🧩 API Endpoints
 
-```bash
-git clone https://github.com/swapnil-0229/Journal_Project.git
-cd Journal_Project
-docker-compose up -d
-./mvnw clean install
-java -jar target/journal-app-0.0.1-SNAPSHOT.jar
+### 🟢 Public / Auth
+- POST /public/signup – Register user
+- POST /public/login – Login
+- GET /public/health-check – System status
+- GET /auth/google/callback – OAuth2 JWT exchange
 
+---
 
-📄 License
-----------
+### 📘 Journal
+- GET /journal – Get all entries
+- GET /journal/{id} – Get entry
+- POST /journal – Create entry
+- PUT /journal/{id} – Update entry
+- DELETE /journal/{id} – Delete entry
 
+---
+
+### 👤 User
+- GET /user/me – Current user profile
+- PUT /user/update – Update profile
+
+---
+
+### 🔴 Admin
+- GET /admin/all-users – List users
+- PUT /admin/promote/{userId} – Promote to ADMIN
+- GET /admin/clear-app-cache – Refresh config/cache
+
+---
+
+## 🧠 Architecture Highlights
+- Stateless Authentication using JWT & OAuth2
+- Event-Driven Architecture with Kafka
+- Cache-Aside Pattern with Redis
+- Asynchronous sentiment processing
+- Runtime dynamic configuration without redeploy
+- Layered architecture (Controller, Service, Repository)
+
+---
+
+## 📄 License
 This project is licensed under the MIT License.
+
+⭐ If you find this project useful, consider giving it a star!
