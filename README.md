@@ -1,151 +1,278 @@
-# 📓 Journal Application API
+📓 Journal Application API
+==========================
 
-A robust backend application for a personal journaling service, built with **Java 21** and **Spring Boot 3**. ☕ This project provides a secure RESTful API for user authentication and full **CRUD** (Create, Read, Update, Delete) functionality for journal entries.
+A production-grade backend for a smart personal journaling platform, built using **Java 21** and **Spring Boot 3**. ☕
 
-It goes beyond basic journaling by integrating **External APIs for Weather**, **Sentiment Analysis**, **Kafka Messaging**, and **Redis Caching** for a high-performance, scalable architecture. 🚀
+The application provides a secure, scalable RESTful API with **JWT & OAuth2 authentication**, full CRUD journaling, and **event-driven async processing**. It integrates Weather APIs, AI-based Sentiment Analysis, Apache Kafka, Redis caching, and dynamic runtime configuration, making it a strong real-world backend system. 🚀
 
----
+✨ Key Features
+--------------
 
-## ✨ Features
+### 🔐 Authentication & Security
 
-* **🔐 Secure Authentication**: 
-    * Implements **Stateless Authentication** using **JWT (JSON Web Tokens)**.
-    * Passwords are securely hashed using **BCrypt**.
-    * Role-based access control (User vs. Admin).
+*   **Stateless authentication** using JWT (JSON Web Tokens).
+    
+*   **OAuth2 login support (Google):**
+    
+    *   Auto user registration on first OAuth login.
+        
+    *   JWT issued after successful OAuth authentication.
+        
+*   **Password hashing** with BCrypt.
+    
+*   **Role-based access control** (USER, ADMIN).
+    
+*   Built with **Spring Security 6**.
+    
 
-* **📖 API Documentation**: 
-    * Integrated **Swagger UI (OpenAPI 3)** for interactive API exploration and testing.
-    * Neatly categorized endpoints (Public, User, Journal, Admin).
+### 📖 API Documentation
 
-* **🤖 Smart Journaling**:
-    * **Weather Integration**: Real-time weather tracking stored with entries.
-    * **Sentiment Analysis**: AI-powered analysis of journal entries (Happy, Sad, Angry, Anxious).
-    * **Redis Caching**: Weather API responses are cached for 5 minutes to optimize performance and reduce external calls.
+*   Integrated **Swagger UI** (OpenAPI 3).
+    
+*   Categorized endpoints: Public / Auth, User, Journal, Admin.
+    
 
-* **⚡ Async Processing & Scheduling**:
-    * **Event-Driven Architecture**: Uses **Apache Kafka** to decouple sentiment analysis processing.
-    * **Weekly Reports**: A scheduler fetches weekly summaries every Sunday at 9:00 AM, pushes them to a Kafka topic, and sends email notifications. 📧
-    * **Dynamic Config**: Application settings can be updated in the database and refreshed in-memory without restarting.
+### 🤖 Smart Journaling
 
-* **👮 Admin Dashboard**: 
-    * Manage users, add new admins, and refresh application configuration (App Cache) dynamically.
+*   **Weather Integration:**
+    
+    *   Real-time weather captured while creating journal entries.
+        
+    *   Weather API URL fetched dynamically from MongoDB.
+        
+*   **Sentiment Analysis:**
+    
+    *   Emotion detection (Happy, Sad, Angry, Anxious).
+        
+    *   Processed asynchronously via Kafka consumers.
+        
+*   **Redis Caching:**
+    
+    *   Weather API responses cached for 5 minutes.
+        
+    *   Reduced external API calls and improved performance.
+        
 
----
+### ⚡ Async Processing & Scheduling
 
-## 🛠️ Tech Stack
+*   **Event-driven architecture** using Apache Kafka.
+    
+*   **Weekly sentiment summary scheduler:**
+    
+    *   Runs every Sunday at 9:00 AM.
+        
+    *   Publishes summaries to Kafka.
+        
+    *   Sends email notifications.
+        
+*   **Dynamic application configuration:**
+    
+    *   Config stored in MongoDB.
+        
+    *   Refreshed in-memory without restart.
+        
+    *   Admin-controlled cache refresh.
+        
 
-* **Language**: Java 21
-* **Framework**: Spring Boot 3.4.1
-* **Database**: MongoDB (NoSQL)
-* **Caching**: Redis
-* **Messaging**: Apache Kafka & Zookeeper
-* **Documentation**: SpringDoc OpenAPI (Swagger UI)
-* **Security**: Spring Security & JWT
-* **Build Tool**: Apache Maven
+### 👮 Admin Capabilities
 
----
+*   View all registered users.
+    
+*   Promote users to admin.
+    
+*   Clear application cache dynamically.
+    
+*   Monitor journal activity.
+    
 
-## 🚀 Getting Started
+🛠️ Tech Stack
+--------------
+
+Layer
+
+Technology
+
+**Language**
+
+Java 21
+
+**Framework**
+
+Spring Boot 3.4.1
+
+**Security**
+
+Spring Security, JWT, OAuth2
+
+**Database**
+
+MongoDB
+
+**Cache**
+
+Redis
+
+**Messaging**
+
+Apache Kafka
+
+**API Docs**
+
+SpringDoc OpenAPI
+
+**Build Tool**
+
+Maven
+
+**Email**
+
+Spring Mail (SMTP)
+
+🚀 Getting Started
+------------------
 
 ### ✅ Prerequisites
 
-* Java Development Kit (JDK) 21
-* Docker & Docker Compose (Recommended for running Kafka, Zookeeper, Redis)
-* Maven
-* SMTP account (e.g., Gmail) for emails
-* Weather API Key (e.g., from weatherapi.com)
+*   JDK 21
+    
+*   Docker & Docker Compose
+    
+*   MongoDB
+    
+*   Redis
+    
+*   Kafka & Zookeeper
+    
+*   Maven
+    
+*   SMTP email account
+    
+*   Weather API key
+    
+*   Google OAuth2 credentials
+    
 
 ### ⚙️ Installation & Setup
 
-1.  **Clone the repository:**
-    ```bash
-    git clone <YOUR_REPOSITORY_URL>
-    cd journal-app
-    ```
+#### 1️⃣ Clone Repository
 
-2.  **Start Infrastructure (Docker):**
-    Use the provided `docker-compose.yml` to start Kafka and Zookeeper. Ensure Redis and MongoDB are also running.
-    ```bash
-    docker-compose up -d
-    ```
+Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   git clone [https://github.com/swapnil-0229/Journal_Project.git](https://github.com/swapnil-0229/Journal_Project.git)  cd Journal_Project   `
 
-3.  **Configure `application.properties`:**
-    Update `src/main/resources/application.properties` with your credentials:
+#### 2️⃣ Start Infrastructure
 
-    ```properties
-    # Database
-    spring.data.mongodb.uri=mongodb://localhost:27017/journaldb
+Ensure MongoDB, Redis, Kafka, and Zookeeper are running.
 
-    # Redis
-    spring.redis.host=localhost
-    spring.redis.port=6379
+Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   docker-compose up -d   `
 
-    # Kafka
-    spring.kafka.bootstrap-servers=localhost:9092
-    spring.kafka.consumer.group-id=weekly-sentiment-group
+#### 3️⃣ Application Configuration
 
-    # Email
-    spring.mail.host=smtp.gmail.com
-    spring.mail.username=YOUR_EMAIL@gmail.com
-    spring.mail.password=YOUR_APP_PASSWORD
+Update src/main/resources/application.properties with your credentials:
 
-    # Weather API Key
-    weather.api.key=YOUR_API_KEY
-    ```
+Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   # MongoDB  spring.data.mongodb.uri=mongodb://localhost:27017/journaldb  # Redis  spring.redis.host=localhost  spring.redis.port=6379  # Kafka  spring.kafka.bootstrap-servers=localhost:9092  spring.kafka.consumer.group-id=weekly-sentiment-group  # JWT  jwt.secret=YOUR_SECRET_KEY  jwt.expiration=86400000  # Email  spring.mail.host=smtp.gmail.com  spring.mail.port=587  spring.mail.username=YOUR_EMAIL@gmail.com  spring.mail.password=YOUR_APP_PASSWORD  spring.mail.properties.mail.smtp.auth=true  spring.mail.properties.mail.smtp.starttls.enable=true  # Weather API  weather.api.key=YOUR_WEATHER_API_KEY  # OAuth2 Google  spring.security.oauth2.client.registration.google.client-id=YOUR_CLIENT_ID  spring.security.oauth2.client.registration.google.client-secret=YOUR_CLIENT_SECRET  spring.security.oauth2.client.registration.google.scope=openid,profile,email   `
 
-4.  **Database Configuration (Critical Step):**
-    The application fetches the Weather API URL dynamically from MongoDB. You **must** insert the following document into the `config_journal_app` collection in your MongoDB database:
+#### 4️⃣ MongoDB Dynamic Config (Mandatory)
 
-    ```json
-    {
-      "key": "WEATHER_API",
-      "value": "[http://api.weatherapi.com/v1/current.json?key=](http://api.weatherapi.com/v1/current.json?key=)<apiKey>&q=<city>"
-    }
-    ```
-    *The application will automatically replace `<apiKey>` and `<city>` at runtime.*
+Insert the following document into the config\_journal\_app collection in MongoDB to enable dynamic weather fetching:
 
-5.  **Build and Run:**
-    ```bash
-    # Using Maven Wrapper
-    ./mvnw clean install
+Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   {    "key": "WEATHER_API",    "value": "[http://api.weatherapi.com/v1/current.json?key=](http://api.weatherapi.com/v1/current.json?key=)&q="  }   `
+
+#### 5️⃣ Build & Run
+
+Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   ./mvnw clean install  java -jar target/journal-app-0.0.1-SNAPSHOT.jar   `
+
+📄 API Documentation
+--------------------
+
+You can access the full API documentation via Swagger UI once the application is running:
+
+*   **Swagger UI:** [http://localhost:8080/swagger-ui/index.html](https://www.google.com/search?q=http://localhost:8080/swagger-ui/index.html)
     
-    # Run the application
-    java -jar target/journal-app-0.0.1-SNAPSHOT.jar
-    ```
+*   **OpenAPI Spec:** [http://localhost:8080/v3/api-docs](https://www.google.com/search?q=http://localhost:8080/v3/api-docs)
+    
 
----
+🔐 Authentication Guide
+-----------------------
 
-## 📄 API Documentation (Swagger UI)
+### JWT Login
 
-This project includes **Swagger UI** for easy API testing and visualization.
+1.  Call POST /public/login with credentials.
+    
+2.  Copy the JWT token from the response.
+    
+3.  In Swagger UI, click **Authorize**.
+    
+4.  Bearer
+    
 
-* **URL**: [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
-* **JSON Spec**: [http://localhost:8080/v3/api-docs](http://localhost:8080/v3/api-docs)
+### OAuth2 Login (Google)
 
-### How to Authenticate in Swagger:
-1.  Call the **/public/login** endpoint to get a JWT token.
-2.  Click the **Authorize** button at the top right of the Swagger page.
-3.  Enter the token in the format: `Bearer <your_token>`.
-4.  Now you can test protected endpoints (User, Journal, Admin).
+1.  Authenticate with Google (client-side or via URL).
+    
+2.  The callback endpoint /auth/google/callback exchanges the auth code for a JWT.
+    
+3.  Use the returned JWT for subsequent requests.
+    
 
----
+🧩 API Endpoints
+----------------
 
-## 📝 Key API Endpoints
+### 🟢 Public / Auth
 
-### 🟢 Public
-* `POST /public/signup`: Register a new user.
-* `POST /public/login`: Authenticate and receive a JWT.
+*   POST /public/signup - Register a new user
+    
+*   POST /public/login - Login with username/password
+    
+*   GET /public/health-check - Check system status
+    
+*   GET /auth/google/callback - **(New)** Google OAuth2 callback to exchange code for JWT
+    
 
-### 👤 User & Journal
-* `GET /journal`: Fetch all journal entries.
-* `POST /journal`: Create an entry with sentiment & weather data.
-* `PUT /user/update`: Update profile credentials.
+### 📘 Journal
+
+*   GET /journal - Get all entries for logged-in user
+    
+*   GET /journal/{id} - Get specific entry
+    
+*   POST /journal - Create new entry
+    
+*   PUT /journal/{id} - Update entry
+    
+*   DELETE /journal/{id} - Delete entry
+    
+
+### 👤 User
+
+*   GET /user/me - Get current user profile
+    
+*   PUT /user/update - Update user details
+    
 
 ### 🔴 Admin
-* `GET /admin/all-users`: View all registered users.
-* `GET /admin/clear-app-cache`: Refresh dynamic configuration.
 
----
+*   GET /admin/all-users - List all users
+    
+*   PUT /admin/promote/{userId} - Promote a user to ADMIN
+    
+*   GET /admin/clear-app-cache - Trigger dynamic config refresh
+    
 
-## 📄 License
-This project is licensed under the **MIT License**.
+🧠 Architecture Highlights
+--------------------------
+
+*   **Stateless Authentication:** Uses JWT & OAuth2.
+    
+*   **Event-Driven:** Kafka-based processing for scalability.
+    
+*   **Cache-Aside:** Redis strategy to reduce database load.
+    
+*   **Async Processing:** Sentiment analysis runs in the background.
+    
+*   **Dynamic Config:** Runtime configuration refresh without redeploy.
+    
+*   **Layered Architecture:** Clean separation of concerns (Controller, Service, Repository).
+    
+
+📄 License
+----------
+
+This project is licensed under the MIT License.
