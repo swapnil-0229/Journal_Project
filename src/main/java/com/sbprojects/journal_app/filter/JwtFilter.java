@@ -1,6 +1,5 @@
 package com.sbprojects.journal_app.filter;
 
-// NEW (Add these)
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -50,9 +49,8 @@ public class JwtFilter extends OncePerRequestFilter{
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                 
                 if (jwtUtil.validateToken(jwt)) { 
-                    
                     UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
-                            userDetails, null, userDetails.getAuthorities());
+                        userDetails, null, userDetails.getAuthorities());
                     
                     auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     

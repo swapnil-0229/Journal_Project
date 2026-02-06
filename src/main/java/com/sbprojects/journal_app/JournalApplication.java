@@ -25,12 +25,12 @@ public class JournalApplication {
 	}
 
 	@Bean
-	public PlatformTransactionManager transactionManager(@NonNull MongoDatabaseFactory dbFactory) {
+	PlatformTransactionManager transactionManager(@NonNull MongoDatabaseFactory dbFactory) {
 		return new MongoTransactionManager(dbFactory);
 	}
 
 	@Bean
-	public RestTemplate restTemplate() {
+	RestTemplate restTemplate() {
 		return new RestTemplate();
 	}
 }

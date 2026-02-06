@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class SwaggerConfig {
 
     @Bean
-    public OpenAPI myCustomConfig() {
+    OpenAPI myCustomConfig() {
         return new OpenAPI()
                 .info(new Info()
                         .title("Journal App API")
@@ -58,7 +58,7 @@ public class SwaggerConfig {
     }
 
     @Bean
-    public OpenApiCustomizer sortTagsAlphabetically() {
+    OpenApiCustomizer sortTagsAlphabetically() {
         return openApi -> {
             List<String> correctOrder = List.of("Public Api's", "User Api's", "Journal Api's", "Admin Api's");
             if (openApi.getTags() != null) {

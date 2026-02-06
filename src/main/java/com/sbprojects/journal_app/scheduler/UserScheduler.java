@@ -38,7 +38,7 @@ public class UserScheduler {
     @Autowired
     private KafkaTemplate<String, SentimentData> kafkaTemplate;
 
-    @Scheduled(cron = "0 0 9 * * SUN")
+    @Scheduled(cron = "0 0 9 * * 7")
     public void fetchUsersAndSendSaMail() { 
         log.info("Starting Weekly Sentiment Analysis Job...");
         
