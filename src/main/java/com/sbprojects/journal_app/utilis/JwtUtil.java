@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.crypto.SecretKey;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
@@ -15,7 +16,8 @@ import io.jsonwebtoken.security.Keys;
 @Component
 public class JwtUtil {
     
-    private String SECRET_KEY = "TaK+Hau^uvCHEFsEVgypW#7g9^k*Z8$V";
+    @Value("${spring.jwt_secret_key}")
+    private String SECRET_KEY;
 
     private SecretKey getSigningKey() {
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
